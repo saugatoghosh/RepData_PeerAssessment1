@@ -12,14 +12,16 @@ This document presents the results from Project Assignment 1 in the Coursera dat
 
 Load packages and set default options
 
-```{r}
+
+```r
 library(dplyr)
 library(lubridate)
 library(lattice)
 library(knitr)
 ```
 
-```{r}
+
+```r
 opts_chunk$set(echo = TRUE)
 ```
 ##Loading and preprocessing the data
@@ -30,17 +32,27 @@ Process/transform the data (if necessary) into a format suitable for your analys
 
 Reading in the data
 
-```{r}
+
+```r
 data <- read.csv('activity.csv', header =TRUE, stringsAsFactors = FALSE)
 ```
 
 Change the date into date format using lubridate
-```{r}
+
+```r
 data$date <- ymd(data$date)
 ```
 Check the data with str
-```{r}
+
+```r
 str(data)
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Date, format: "2012-10-01" "2012-10-01" ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 ##What is mean total number of steps taken per day
 
@@ -51,52 +63,82 @@ For this part of the assignment the missing values can be ignored.
 3. Calculate and report the mean and median of the total number of steps taken per day.
 
 1. Calculate the total number of steps taken per day removing NAs 
-```{r}
+
+```r
 data2 <- aggregate(steps ~ date, data=data, sum, na.rm = TRUE)
 ```
 2. Make histogram
 
-```{r}
+
+```r
 hist(data2$steps, breaks=20, main="Total Steps per Day", xlab="Steps", ylab="Frequency")
 ```
 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
+
 3. Calculate the mean and median of the total number of steps taken per day
 
-```{r}
+
+```r
 meansteps <- mean(data2$steps)
 mediansteps <- median(data2$steps)
 
 meansteps
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 mediansteps
+```
+
+```
+## [1] 10765
 ```
 
 ###What is the average daily activity pattern?
 
 To find the average daily activity pattern we aggregated the data on steps by the interval and took the mean. This was then plotted into a graph where the pattern is easily discernible. The maximum value is found numerically and displayed.
 
-```{r}
+
+```r
 data3 <- aggregate(steps ~ interval, data = data, mean, na.rm = TRUE)
 
 plot(data3$interval, data3$steps, type="l", col = "blue",main="Average Steps per Five Minute Interval", xlab="Interval No.", ylab="steps")
 ```
 
-```{r}
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
+
+
+```r
 maxsteps <- max(data3$steps)
 print(paste("The maximum number of steps in a five minute interval was: ", maxsteps))
+```
+
+```
+## [1] "The maximum number of steps in a five minute interval was:  206.169811320755"
 ```
 
 ###Imputing missing values
 
 1.Calculate and report the total number of missing values in the dataset
 
-```{r}
+
+```r
 missingdata <- sum(is.na(data))
 print(paste("There are", missingdata, "missing data points."))
 ```
 
+```
+## [1] "There are 2304 missing data points."
+```
+
 2. Missing values for steps imputed with the mean for that 5-minute interval and new dataset created
 
-```{r}
+
+```r
 impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 
 datanew <- data %>%
@@ -107,20 +149,34 @@ datanew <- data %>%
 ```
 3. Make a histogram of the total number of steps taken each day and calculate and report the mean and median total number of steps taken per day
 
-```{r}
 
+```r
 datanew2 <- aggregate(steps ~ date, data=datanew, sum)
 
 hist(datanew2$steps, breaks=20, main="Total Steps per Day", xlab="Steps", ylab="Frequency")
 ```
 
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png)
 
-```{r}
+
+
+```r
 meansteps2 <- mean(datanew2$steps)
 mediansteps2 <- median(datanew2$steps)
 
 meansteps2
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 mediansteps2
+```
+
+```
+## [1] 10766.19
 ```
 Since we have imputed missing values for steps with mean steps for that 5-minute interval, there is no change in the overall mean steps taken per day while the median steps taken per day is now exactly equal to the mean.
 
@@ -128,15 +184,17 @@ Since we have imputed missing values for steps with mean steps for that 5-minute
 
 In order to quickly determine if there are activity differences between weekends and weekdays we simply plot two graphs, one with weekday data and one with weekend data.
 
-```{r}
+
+```r
 datanew$day <- as.factor(ifelse(weekdays(datanew$date) == "Saturday" | weekdays(datanew$date) == "Sunday", "weekend", "weekday"))
 ```
 
-```{r}
+
+```r
 plotdata <- aggregate(steps ~ interval + day, datanew, mean)
 xyplot(steps ~ interval | factor(day), data=plotdata, aspect=1/3, type="l")
 ```
 
-
+![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16-1.png)
 
 
