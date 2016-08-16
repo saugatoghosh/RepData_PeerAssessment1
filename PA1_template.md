@@ -22,7 +22,7 @@ library(knitr)
 
 
 ```r
-opts_chunk$set(echo = TRUE)
+opts_chunk$set(echo = TRUE, fig.path = 'Figs/')
 ```
 ##Loading and preprocessing the data
 
@@ -74,7 +74,7 @@ data2 <- aggregate(steps ~ date, data=data, sum, na.rm = TRUE)
 hist(data2$steps, breaks=20, main="Total Steps per Day", xlab="Steps", ylab="Frequency")
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
+![plot of chunk unnamed-chunk-7](Figs/unnamed-chunk-7-1.png)
 
 3. Calculate the mean and median of the total number of steps taken per day
 
@@ -109,7 +109,7 @@ data3 <- aggregate(steps ~ interval, data = data, mean, na.rm = TRUE)
 plot(data3$interval, data3$steps, type="l", col = "blue",main="Average Steps per Five Minute Interval", xlab="Interval No.", ylab="steps")
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-9](Figs/unnamed-chunk-9-1.png)
 
 
 ```r
@@ -156,7 +156,7 @@ datanew2 <- aggregate(steps ~ date, data=datanew, sum)
 hist(datanew2$steps, breaks=20, main="Total Steps per Day", xlab="Steps", ylab="Frequency")
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-13](Figs/unnamed-chunk-13-1.png)
 
 
 
@@ -195,6 +195,8 @@ plotdata <- aggregate(steps ~ interval + day, datanew, mean)
 xyplot(steps ~ interval | factor(day), data=plotdata, aspect=1/3, type="l")
 ```
 
-![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16-1.png)
+![plot of chunk unnamed-chunk-16](Figs/unnamed-chunk-16-1.png)
+
+
 
 

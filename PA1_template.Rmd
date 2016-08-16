@@ -20,7 +20,7 @@ library(knitr)
 ```
 
 ```{r}
-opts_chunk$set(echo = TRUE)
+opts_chunk$set(echo = TRUE, fig.path = 'Figs/')
 ```
 ##Loading and preprocessing the data
 
